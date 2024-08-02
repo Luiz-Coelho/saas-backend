@@ -1,18 +1,34 @@
 import { Router } from "express";
-import { createCustomer, deleteCustomer, getCustomers, getCustomerById, updateCustomer } from "../controllers/customers.controller";
+import {
+  createCustomer,
+  deleteCustomer,
+  getCustomers,
+  getCustomerById,
+  updateCustomer,
+} from "../controllers/customers.controller";
 import validate from "../middlewares/validateResource";
-import { Customer, UpdateCustomer } from "../schemas/customer.schema";
+import {
+  Customer,
+  CustomerWithId,
+  SearchCustomer,
+} from "../schemas/customer.schema";
+import { Params } from "../schemas/params.schema";
 
-const router = Router()
+const router = Router();
 
-router.post("/", validate(Customer), createCustomer)
+router.post("/", validate(Customer, "body"), createCustomer);
 
-router.get("/", getCustomers)
+router.get("/", validate(SearchCustomer, "query"), getCustomers);
 
-router.get("/:id", getCustomerById)
+router.get("/:id", validate(Params, "params"), getCustomerById);
 
-router.put("/:id", validate(UpdateCustomer), updateCustomer)
+router.put(
+  "/:id",
+  validate(Params, "params"),
+  validate(CustomerWithId, "body"),
+  updateCustomer
+);
 
-router.delete("/:id", deleteCustomer)
+router.delete("/:id", validate(Params, "params"), deleteCustomer);
 
-export default router
+export default router;
