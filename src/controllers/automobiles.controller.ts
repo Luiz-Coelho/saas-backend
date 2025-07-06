@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { AutomobileModel } from "../model/automobile.model";
-import { Automobile } from "../schemas/automobile.schema";
+import { Automobile, AutomobileBase } from "../schemas/automobile.schema";
 import { Params } from "../schemas/params.schema";
+import handleError from "../services/handleError";
 
 export async function createAutomobile(
-  req: Request<{}, {}, Automobile>,
+  req: Request<{}, {}, AutomobileBase>,
   res: Response
 ) {
   try {
@@ -13,7 +14,7 @@ export async function createAutomobile(
       .status(201)
       .json({ message: "Automobile created sucessfully", automobile });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error, "licensePlate");
   }
 }
 
@@ -22,7 +23,7 @@ export async function getAutomobiles(req: Request, res: Response) {
     const automobiles = await AutomobileModel.find({});
     return res.status(200).send(automobiles);
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -33,9 +34,9 @@ export async function getAutomobileById(req: Request<Params>, res: Response) {
     if (!automobile) {
       return res.status(404).json({ message: "Automobile not found" });
     }
-    res.status(200).send(automobile);
+    return res.status(200).send(automobile);
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -58,7 +59,7 @@ export async function updateAutomobile(
       .status(200)
       .json({ message: "Automobile updated sucessfully", updatedAutomobile });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -74,6 +75,6 @@ export async function deleteAutomobile(req: Request<Params>, res: Response) {
       .status(200)
       .json({ message: "Automobile deleted successfully", deletedAutomobile });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }

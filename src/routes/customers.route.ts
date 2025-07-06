@@ -9,14 +9,14 @@ import {
 import validate from "../middlewares/validateResource";
 import {
   Customer,
-  CustomerWithId,
+  CustomerBase,
   SearchCustomer,
 } from "../schemas/customer.schema";
 import { Params } from "../schemas/params.schema";
 
 const router = Router();
 
-router.post("/", validate(Customer, "body"), createCustomer);
+router.post("/", validate(CustomerBase, "body"), createCustomer);
 
 router.get("/", validate(SearchCustomer, "query"), getCustomers);
 
@@ -25,7 +25,7 @@ router.get("/:id", validate(Params, "params"), getCustomerById);
 router.put(
   "/:id",
   validate(Params, "params"),
-  validate(CustomerWithId, "body"),
+  validate(Customer, "body"),
   updateCustomer
 );
 

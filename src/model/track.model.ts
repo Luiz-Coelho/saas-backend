@@ -1,7 +1,7 @@
 import { Document, model, Schema } from "mongoose";
-import { Track } from "../schemas/track.schema";
+import { TrackBase } from "../schemas/track.schema";
 
-interface ITrack extends Document, Track {}
+interface ITrack extends Document, TrackBase {}
 
 const trackSchema = new Schema<ITrack>(
   {

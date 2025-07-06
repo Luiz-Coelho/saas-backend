@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
-import { Category } from "../schemas/category.schema";
+import { Category, CategoryBase } from "../schemas/category.schema";
 import { CategoryModel } from "../model/category.model";
 import { Params } from "../schemas/params.schema";
+import handleError from "../services/handleError";
 
 export async function createCategory(
-  req: Request<{}, {}, Category>,
+  req: Request<{}, {}, CategoryBase>,
   res: Response
 ) {
   try {
@@ -13,7 +14,7 @@ export async function createCategory(
       .status(201)
       .json({ message: "Category created sucessfully", category });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error, "category");
   }
 }
 
@@ -24,7 +25,7 @@ export async function getCategories(req: Request, res: Response) {
       .populate("customer", "name");
     return res.status(200).send(categories);
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -37,7 +38,7 @@ export async function getCategoryById(req: Request<Params>, res: Response) {
     }
     return res.status(200).send(category);
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -60,7 +61,7 @@ export async function updateCategory(
       .status(200)
       .json({ message: "Category updated successfully", updatedCategory });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -76,6 +77,6 @@ export async function deleteCategory(req: Request<Params>, res: Response) {
       .status(200)
       .json({ message: "Category deleted successfully", deletedCategory });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }

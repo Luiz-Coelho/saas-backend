@@ -1,7 +1,7 @@
 import { Document, Schema, model } from "mongoose";
-import { Customer } from "../schemas/customer.schema";
+import { CustomerBase } from "../schemas/customer.schema";
 
-interface ICustomer extends Document, Customer {}
+interface ICustomer extends Document, CustomerBase {}
 
 const customerSchema = new Schema<ICustomer>(
   {

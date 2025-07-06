@@ -7,12 +7,12 @@ import {
   updateCategory,
 } from "../controllers/categories.controller";
 import validate from "../middlewares/validateResource";
-import { Category } from "../schemas/category.schema";
+import { Category, CategoryBase } from "../schemas/category.schema";
 import { Params } from "../schemas/params.schema";
 
 const router = Router();
 
-router.post("/", validate(Category, "body"), createCategory);
+router.post("/", validate(CategoryBase, "body"), createCategory);
 
 router.get("/", getCategories);
 

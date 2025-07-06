@@ -1,30 +1,35 @@
 import { z } from "zod";
 import { ObjectId } from "../services/objectId";
 
-export const Customer = z
+export const CustomerBase = z
   .object({
-    email: z.string().email("Insert a valid email"),
-    name: z.string().min(1),
-    address: z.string().min(1),
+    email: z
+      .string()
+      .email("Insira um email válido")
+      .min(1, "Campo obrigatório")
+      .toLowerCase()
+      .trim(),
+    name: z.string().min(1, "Campo obrigatório").toLowerCase().trim(),
+    address: z.string().min(1, "Campo obrigatório").toLowerCase().trim(),
     category: z.array(ObjectId),
     track: z.array(ObjectId).optional(),
-    status: z.enum(["active", "inactive"]).default("inactive"),
+    status: z.string().default("inativo"),
   })
   .strict();
 
-export type Customer = z.infer<typeof Customer>;
+export type CustomerBase = z.infer<typeof CustomerBase>;
 
-export const CustomerWithId = Customer.extend({
+export const Customer = CustomerBase.extend({
   _id: z.string(),
 });
 
-export type CustomerWithId = z.infer<typeof CustomerWithId>;
+export type Customer = z.infer<typeof Customer>;
 
 export const SearchCustomer = z
   .object({
-    email: z.string(),
-    name: z.string(),
-    address: z.string(),
+    email: z.string().toLowerCase().trim(),
+    name: z.string().toLowerCase().trim(),
+    address: z.string().toLowerCase().trim(),
     category: z.array(z.string()),
     track: z.array(z.string()),
     status: z.array(z.string()),

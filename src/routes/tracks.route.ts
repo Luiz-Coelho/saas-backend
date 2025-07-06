@@ -8,11 +8,11 @@ import {
 } from "../controllers/tracks.controller";
 import validate from "../middlewares/validateResource";
 import { Params } from "../schemas/params.schema";
-import { Track } from "../schemas/track.schema";
+import { Track, TrackBase } from "../schemas/track.schema";
 
 const router = Router();
 
-router.post("/", validate(Track, "body"), createTrack);
+router.post("/", validate(TrackBase, "body"), createTrack);
 
 router.get("/", getTracks);
 

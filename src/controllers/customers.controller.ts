@@ -1,12 +1,13 @@
 import { Request, Response } from "express";
 import { CustomerModel } from "../model/customer.model";
-import { Customer, CustomerWithId } from "../schemas/customer.schema";
+import { Customer, CustomerBase } from "../schemas/customer.schema";
 import stringContains from "../services/stringContains";
 import arrayContains from "../services/arrayContains";
 import { Params } from "../schemas/params.schema";
+import handleError from "../services/handleError";
 
 export async function createCustomer(
-  req: Request<{}, {}, Customer>,
+  req: Request<{}, {}, CustomerBase>,
   res: Response
 ) {
   try {
@@ -15,7 +16,7 @@ export async function createCustomer(
       .status(201)
       .json({ message: "Customer created sucessfully", customer });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -33,7 +34,7 @@ export async function getCustomers(req: Request, res: Response) {
       .populate("track", "name");
     return res.status(200).send(customers);
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -46,11 +47,11 @@ export async function getCustomerById(req: Request<Params>, res: Response) {
     }
     return res.status(200).send(customer);
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 export async function updateCustomer(
-  req: Request<Params, {}, CustomerWithId>,
+  req: Request<Params, {}, Customer>,
   res: Response
 ) {
   try {
@@ -70,7 +71,7 @@ export async function updateCustomer(
       .status(200)
       .json({ message: "Customer updated sucessfully", updatedCustomer });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -86,6 +87,6 @@ export async function deleteCustomer(req: Request<Params>, res: Response) {
       .status(200)
       .json({ message: "Customer deleted sucessfully", deletedCustomer });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }

@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
-import { Automobile } from "../schemas/automobile.schema";
+import { AutomobileBase } from "../schemas/automobile.schema";
 
-interface IAutomobile extends Document, Automobile {}
+interface IAutomobile extends Document, AutomobileBase {}
 
 const automobileSchema = new Schema<IAutomobile>(
   {

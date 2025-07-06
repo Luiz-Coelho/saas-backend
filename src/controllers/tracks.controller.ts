@@ -1,16 +1,20 @@
 import { Request, Response } from "express";
-import { Track } from "../schemas/track.schema";
+import { Track, TrackBase } from "../schemas/track.schema";
 import { Params } from "../schemas/params.schema";
 import { TrackModel } from "../model/track.model";
+import handleError from "../services/handleError";
 
-export async function createTrack(req: Request<{}, {}, Track>, res: Response) {
+export async function createTrack(
+  req: Request<{}, {}, TrackBase>,
+  res: Response
+) {
   try {
     const track = await TrackModel.create(req.body);
     return res
       .status(201)
       .json({ message: "Track created sucessfully", track });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -21,7 +25,7 @@ export async function getTracks(req: Request, res: Response) {
       .populate("customer", "name");
     return res.status(200).send(tracks);
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -34,7 +38,7 @@ export async function getTrackById(req: Request<Params>, res: Response) {
     }
     return res.status(200).send(track);
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -55,7 +59,7 @@ export async function updateTrack(
       .status(200)
       .json({ message: "Track updated successfully", updatedTrack });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
 
@@ -71,6 +75,6 @@ export async function deleteTrack(req: Request<Params>, res: Response) {
       .status(200)
       .json({ message: "Track deleted successfully", deletedTrack });
   } catch (error) {
-    return res.status(500).send(error);
+    handleError(res, error);
   }
 }
